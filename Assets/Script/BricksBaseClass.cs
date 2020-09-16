@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class BricksBaseClass : MonoBehaviour
+public class RaycastBaseClass : MonoBehaviour
 {
     // 射线函数封装
     public RaycastHit2D Raycast(Vector2 offset, Vector2 rayDiraction, float length, LayerMask layer)

@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class BrokenBricks : BricksBaseClass
+public class BrokenBricks : RaycastBaseClass
 {
     public GameObject bro1;
     public GameObject bro2;
@@ -31,9 +31,12 @@ public class BrokenBricks : BricksBaseClass
     {
         if (collision.gameObject.tag == "Player")
         {
+            if (!GameManager.BricksBrokenCheck())
+                return;
             RaycastHit2D leftCheck = Raycast(new Vector2(-0.49f, -0.5f), Vector2.down, 0.3f, playerLayer);
             RaycastHit2D rightCheck = Raycast(new Vector2(0.49f, -0.5f), Vector2.down, 0.3f, playerLayer);
-            if (leftCheck || rightCheck)
+            RaycastHit2D midCheck = Raycast(new Vector2(0f, -0.5f), Vector2.down, 0.3f, playerLayer);
+            if (leftCheck || rightCheck || midCheck)
             {
                 current.GetComponent<Renderer>().material.color = new Color(1f, 1f, 1f, 0);
                 Destroy(current.GetComponent<BoxCollider2D>(), 0.3f);
@@ -54,10 +57,10 @@ public class BrokenBricks : BricksBaseClass
 
     public void Brokening()
     {
-        bro1Rb.velocity = new Vector2(3f, 2f);
-        bro2Rb.velocity = new Vector2(-3f, 2f);
-        bro3Rb.velocity = new Vector2(3f, 4f);
-        bro4Rb.velocity = new Vector2(-3f, 4f);
+        bro1Rb.velocity = new Vector2(3f, 4f);
+        bro2Rb.velocity = new Vector2(-3f, 4f);
+        bro3Rb.velocity = new Vector2(3f, 8f);
+        bro4Rb.velocity = new Vector2(-3f, 8f);
         Destroy(current.gameObject, 2f);
     }
 }

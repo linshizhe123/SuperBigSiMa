@@ -7,6 +7,10 @@ TagManager:
   - Ground
   - CoinBricks
   - Bricks
+  - Column
+  - Enemies
+  - Boundary
+  - DeathZhixun
   layers:
   - Default
   - TransparentFX
@@ -20,9 +24,9 @@ TagManager:
   - Bricks
   - CoinBricks
   - Player
-  - 
-  - 
-  - 
+  - Enemies
+  - Boundary
+  - DeathZhixun
   - 
   - 
   - 

@@ -89,8 +89,18 @@
     <Compile Include="Assets\Script\BricksBaseClass.cs" />
     <Compile Include="Assets\Script\BrokenBricks.cs" />
     <Compile Include="Assets\Script\CoinBricks.cs" />
+    <Compile Include="Assets\Script\DeathOtto.cs" />
+    <Compile Include="Assets\Script\DeathPdd.cs" />
+    <Compile Include="Assets\Script\DeathPlayer.cs" />
+    <Compile Include="Assets\Script\DeathZhixun.cs" />
     <Compile Include="Assets\Script\GameManager.cs" />
+    <Compile Include="Assets\Script\Otto.cs" />
+    <Compile Include="Assets\Script\OttoBrick.cs" />
+    <Compile Include="Assets\Script\Pdd.cs" />
     <Compile Include="Assets\Script\PlayerControl.cs" />
+    <Compile Include="Assets\Script\Sword.cs" />
+    <Compile Include="Assets\Script\SwordBrick.cs" />
+    <Compile Include="Assets\Script\Zhixun.cs" />
     <None Include="Assets\Samples\Cinemachine\2.6.1\Cinemachine Example Scenes\Scenes\Anywhere Door\ScreenCutoutShader.shader" />
     <Reference Include="Cinemachine">
       <HintPath>E:/UnityProjects/SuperBigSiMa/Library/ScriptAssemblies/Cinemachine.dll</HintPath>

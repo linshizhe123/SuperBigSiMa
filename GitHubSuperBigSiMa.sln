@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{CAEFADF4-512E-C6DC-9156-8527C6CD6E03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Timeline.Editor", "Unity.Timeline.Editor.csproj", "{8568B5BF-70BC-7953-8876-EE98F478D183}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CAEFADF4-512E-C6DC-9156-8527C6CD6E03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAEFADF4-512E-C6DC-9156-8527C6CD6E03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAEFADF4-512E-C6DC-9156-8527C6CD6E03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAEFADF4-512E-C6DC-9156-8527C6CD6E03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8568B5BF-70BC-7953-8876-EE98F478D183}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8568B5BF-70BC-7953-8876-EE98F478D183}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8568B5BF-70BC-7953-8876-EE98F478D183}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8568B5BF-70BC-7953-8876-EE98F478D183}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

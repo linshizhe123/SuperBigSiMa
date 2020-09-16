@@ -5,13 +5,13 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private PolygonCollider2D coll;
     private Animator anim;
     private float jumpTime; // 判断长按跳跃时间
 
     [Header("按键控制")]
     public bool jumpPressed; // 按一次
     public bool jumpHold;  // 长按
+    public bool attackPressed;
 
     [Header("参数")]
     public float speed;
@@ -24,21 +24,22 @@ public class PlayerControl : MonoBehaviour
     public bool isJumping;
     public bool isHeadBlocked; // 撞到头
     public float xVelocity;
+    public bool isAttack;
 
     [Header("环境监测")]
     public LayerMask groundLayer;
     public LayerMask bricksLayer;
     public LayerMask coinBricksLayer;
+    public LayerMask enemiesLayer;
     public float footOffset = 0.3f;
-    public float groundDistance = 0.2f; // 脚下射线距离
+    public float groundDistance = 0.2f; // 脚下到地面射线距离
     public float headDistance = 0.5f; // 头顶射线距离
-
-    float xPos;
+    public float enemiesDistance = 0.3f; // 脚下到敌人射线距离
+    public GameObject deathPlayer;
 
     void Start()
     {
         rb = transform.GetComponent<Rigidbody2D>();
-        coll = transform.GetComponent<PolygonCollider2D>();
         anim = transform.GetComponent<Animator>();
     }
 
@@ -47,6 +48,12 @@ public class PlayerControl : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
             jumpPressed = true;
         jumpHold = Input.GetButton("Jump");
+        if (Input.GetKeyDown("x"))
+            attackPressed = true;
+        if (GameManager.isHat)
+            transform.GetChild(0).gameObject.SetActive(true);
+        if (GameManager.isSword)
+            transform.GetChild(1).gameObject.SetActive(true);
     }
 
     private void FixedUpdate()
@@ -56,6 +63,9 @@ public class PlayerControl : MonoBehaviour
         PlayerMovement();
         PlayerJump();
         PlayAnimation();
+        TreadEnemies();
+        DeathCheck();
+        PlayerAttack();
     }
 
     void PlayerDirection()
@@ -64,17 +74,7 @@ public class PlayerControl : MonoBehaviour
         if (xVelocity != 0)
         {
             transform.localScale = new Vector3(xVelocity, 1, 1);
-            xPos = transform.position.x;
         }
-        else
-        {
-            RaycastHit2D leftCheckBricks = Raycast(new Vector2(-footOffset, -1f), Vector2.down, groundDistance, bricksLayer);
-            RaycastHit2D rightCheckBricks = Raycast(new Vector2(footOffset, -1f), Vector2.down, groundDistance, bricksLayer);
-            // 不知道为什么站在高处就会滑动 只好锁定一下position
-            if (leftCheckBricks || rightCheckBricks)
-                transform.position = new Vector3(xPos, transform.position.y, transform.position.z);
-        }
-
     }
 
     void PlayerMovement()
@@ -100,6 +100,51 @@ public class PlayerControl : MonoBehaviour
         jumpPressed = false;
     }
 
+    // 角色攻击
+    void PlayerAttack()
+    {
+        if (attackPressed)
+        {
+            anim.SetBool("isAttacking", true);
+            attackPressed = false;
+        }
+        else
+        {
+            anim.SetBool("isAttacking", false);
+        }
+    }
+
+    // 踩敌人检测
+    void TreadEnemies()
+    {
+        if (GameManager.isTread)
+        {
+            rb.AddForce(new Vector2(0f, 20f), ForceMode2D.Impulse);
+            GameManager.isTread = false;
+        }
+    }
+
+    // 死亡检测
+    void DeathCheck()
+    {
+        if (!GameManager.isLive)
+        {
+            Time.timeScale = 0;
+            gameObject.SetActive(false);
+            Instantiate(deathPlayer, transform.position, transform.rotation);
+            GameManager.isLive = true;
+        }
+    }
+
+    // 碰撞检测
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Boundary")
+        {
+            GameManager.PlayerDied();
+        }
+    }
+
     // 动画参数修改
     void PlayAnimation()
     {
@@ -116,19 +161,12 @@ public class PlayerControl : MonoBehaviour
         LayerMask[] layerList = { groundLayer, bricksLayer, coinBricksLayer };
         foreach (LayerMask layer in layerList)
         {
-            if (RaycastFeet(layer))
+            if (RaycastFeet(layer, groundDistance))
             {
                 checkResult = true;
                 break;
             }
         }
-        // 左右脚射线
-        //RaycastHit2D leftCheckGround = Raycast(new Vector2(-footOffset, -1f), Vector2.down, groundDistance, groundLayer);
-        //RaycastHit2D rightCheckGround = Raycast(new Vector2(footOffset, -1f), Vector2.down, groundDistance, groundLayer);
-        //RaycastHit2D leftCheckBricks = Raycast(new Vector2(-footOffset, -1f), Vector2.down, groundDistance, bricksLayer);
-        //RaycastHit2D rightCheckBricks = Raycast(new Vector2(footOffset, -1f), Vector2.down, groundDistance, bricksLayer);
-        //RaycastHit2D leftCheckCoinBricks = Raycast(new Vector2(-footOffset, -1f), Vector2.down, groundDistance, coinBricksLayer);
-        //RaycastHit2D rightCheckCoinBricks = Raycast(new Vector2(footOffset, -1f), Vector2.down, groundDistance, coinBricksLayer);
         if (checkResult)
             isOnGround = true;
         else isOnGround = false;
@@ -142,10 +180,10 @@ public class PlayerControl : MonoBehaviour
     }
 
     // 封装左右脚射线遍历方法
-    bool RaycastFeet(LayerMask layer)
+    bool RaycastFeet(LayerMask layer, float distance)
     {
-        RaycastHit2D leftCheck = Raycast(new Vector2(-footOffset, -1f), Vector2.down, groundDistance, layer);
-        RaycastHit2D rightCheck = Raycast(new Vector2(footOffset, -1f), Vector2.down, groundDistance, layer);
+        RaycastHit2D leftCheck = Raycast(new Vector2(-footOffset, -1f), Vector2.down, distance, layer);
+        RaycastHit2D rightCheck = Raycast(new Vector2(footOffset, -1f), Vector2.down, distance, layer);
         return leftCheck || rightCheck;
     }
 
